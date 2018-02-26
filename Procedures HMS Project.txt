@@ -1,0 +1,391 @@
+create proc appointment_reportt
+  (
+@patient_id varchar(100),
+ @doctor_id varchar(100),
+ @doctor_name varchar(100),
+ @symptom varchar(200),
+ @room varchar(100),
+ @timing varchar(100)
+)
+ as insert into appointment_report 
+ values
+(
+@patient_id,@doctor_id,@doctor_name,@symptom,@room,@timing
+);
+
+---------------------------------------------------------------------------
+
+create proc AssignDoctor_medication
+(
+@patient_id varchar(100),@visiting_date datetime,
+@test_name varchar(100),@test_time datetime, @test_room bigint
+)
+as 
+update assign_doctor set 
+patient_id = @patient_id,test_name = @test_name,test_time = @test_time,test_room = @test_room
+where @patient_id = patient_id and @visiting_date = visiting_date;
+
+---------------------------------------------------------------------------
+
+create proc [AssignDoctor_medication_medicines
+(
+@patient_id varchar(100),
+@visiting_date datetime,
+@medicine_name varchar(100),
+@no_of_doses bigint,
+ @no_of_days bigint
+)
+as 
+update assign_doctor set patient_id = @patient_id,medicine_name = @medicine_name,no_of_doses = @no_of_doses,no_of_days = @no_of_days
+where @patient_id = patient_id and @visiting_date = visiting_date;
+
+
+---------------------------------------------------------------------------
+
+CREATE PROC delete_doctor
+(
+@doctor_id varchar(10)
+)
+as 
+delete from doctor_details where doctor_id=@doctor_id;
+
+---------------------------------------------------------------------------
+
+CREATE PROC delete_patient
+(
+@patient_id varchar(10)
+)
+as 
+delete from patient_personal_details where patient_id=@patient_id;
+
+---------------------------------------------------------------------------
+
+create proc disease_specialisation
+(
+@symptom_name varchar(100)
+)
+as 
+select * from disease_specialization
+where [symptom_name]=@symptom_name;
+
+
+---------------------------------------------------------------------------
+
+create proc display_doctor
+(
+@doctor_id varchar(10)
+)
+as
+select * from doctor_details where doctor_id = @doctor_id;
+
+---------------------------------------------------------------------------
+
+CREATE proc display_patient
+(
+@patient_id varchar(10)
+ )
+as
+select * from patient_personal_details
+where  patient_id=@patient_id ;
+
+
+---------------------------------------------------------------------------
+
+create proc doctor_login
+(
+@doctor_id varchar(100),@pass varchar(100)
+)
+as select * from doctor_details
+where [doctor_id]=@doctor_id and [doctor_password]=@pass;
+
+
+---------------------------------------------------------------------------
+
+create proc insert_assign_doctor
+(
+@visiting_date datetime,
+@patient_id varchar(100),
+@disease_name varchar(100),
+@symptoms_description varchar(1000),
+@room varchar(100)
+)
+as insert into assign_doctor
+(
+visiting_date,
+patient_id,
+disease_name,
+symptoms_description,
+room)
+values(
+@visiting_date,
+@patient_id,
+@disease_name,
+@symptoms_description,
+@room
+)
+
+---------------------------------------------------------------------------
+
+CREATE proc insert_data
+(
+@doctor_id varchar(10),
+@doctor_password varchar(20),
+@doctor_name varchar(100),
+@dob datetime,
+@aadhaar_id bigint,
+@blood_group varchar(10),
+@gender varchar(100),
+@phone_number bigint,
+@emergency_Contact bigint,
+@email_id varchar(100),
+@specialisation varchar(25),
+@address varchar(100),
+@zipcode bigint,
+@city varchar(100),
+@state varchar(100),
+@visiting_hours_start varchar(50),
+@visiting_hours_end varchar(50),
+@room_no bigint
+)
+as
+insert into doctor_details
+(
+doctor_id,
+doctor_password,
+doctor_name ,
+dob,
+aadhaar_id,
+blood_group ,
+gender ,
+phone_number,
+emergency_Contact,
+email_id ,
+specialisation ,
+address ,
+zipcode ,
+city ,
+state ,
+visiting_hours_start,
+visiting_hours_end ,
+room_no 
+)
+values
+(
+@doctor_id,
+@doctor_password ,
+@doctor_name ,
+@dob ,
+@aadhaar_id ,
+@blood_group ,
+@gender ,
+@phone_number ,
+@emergency_Contact ,
+@email_id ,
+@specialisation ,
+@address ,
+@zipcode ,
+@city ,
+@state ,
+@visiting_hours_start ,
+@visiting_hours_end ,
+@room_no 
+);
+
+---------------------------------------------------------------------------
+
+create proc insert_data_patient
+(
+@patient_id varchar(10),
+@patient_name varchar(100),
+@dob date,
+@aadhaar_id bigint,
+@guardian_name varchar(100),
+@blood_group varchar(10),
+@age bigint,
+@gender varchar(100),
+@phone_number bigint,
+@emergency_Contact bigint,
+@email_id varchar(100),
+@address varchar(100),
+@zipcode bigint,
+@city varchar(100),
+@state varchar(100)
+)
+as
+insert into patient_personal_details
+(
+patient_id,
+patient_name,
+dob,
+aadhaar_id,
+guardian_name,
+blood_group,
+age,
+gender,
+phone_number,
+emergency_Contact,
+email_id,
+address,
+zipcode,
+city,
+state)
+values
+(@patient_id,
+@patient_name,
+@dob,
+@aadhaar_id ,
+@guardian_name,
+@blood_group,
+@age,
+@gender,
+@phone_number,
+@emergency_Contact,
+@email_id,
+@address ,
+@zipcode,
+@city,
+@state 
+);
+
+---------------------------------------------------------------------------
+
+CREATE proc login_user_insert
+(
+@user_id varchar(100),@pass varchar(100)
+)
+as select * from login
+where [USER ID]=@user_id and pass=@pass;
+
+---------------------------------------------------------------------------
+
+create proc retrieve_assign_doctor
+(
+@patient_id varchar(10),@visiting_date varchar(100)
+)
+as 
+select *  from assign_doctor where patient_id=@patient_id and  visiting_date=@visiting_date;
+
+---------------------------------------------------------------------------
+
+create proc retrieve_assign_doctor_medication
+(
+@patient_id varchar(100)
+)
+as 
+select *  from assign_doctor where patient_id=@patient_id;
+
+---------------------------------------------------------------------------
+
+create proc update_doctor
+(
+@doctor_password varchar(20),
+@doctor_name varchar(100),
+@dob date,
+@aadhaar_id bigint,
+@blood_group varchar(10),
+@gender varchar(100),
+@phone_number bigint,
+@emergency_Contact bigint,
+@email_id varchar(100),
+@specialisation varchar(25),
+@address varchar(100),
+@zipcode bigint,
+@city varchar(100),
+@state varchar(100),
+@visiting_hours_start time,
+@visiting_hours_end time,
+@room_no bigint,
+@doctor_id VARCHAR(10)
+)
+as update doctor_details set 
+doctor_password=@doctor_password,
+doctor_name=@doctor_name,
+dob=@dob,
+aadhaar_id=@aadhaar_id,
+blood_group=@blood_group ,
+gender=@gender ,
+phone_number=@phone_number,
+emergency_Contact=@emergency_Contact,
+email_id=@email_id ,
+specialisation=@specialisation ,
+address=@address ,
+zipcode=@zipcode ,
+city=@city ,
+state=@state ,
+visiting_hours_start=@visiting_hours_start,
+visiting_hours_end=@visiting_hours_end ,
+room_no=@room_no 
+where doctor_id = @doctor_id;
+
+---------------------------------------------------------------------------
+
+create proc update_patient
+(
+@patient_id varchar(10),
+@patient_name varchar(100),
+@dob date,
+@aadhaar_id bigint,
+@guardian_name varchar(100),
+@blood_group varchar(10),
+@age bigint,
+@gender varchar(100),
+@phone_number bigint,
+@emergency_Contact bigint,
+@email_id varchar(100),
+@address varchar(100),
+@zipcode bigint,
+@city varchar(100),
+@state varchar(100)
+ )
+as
+update patient_personal_details set
+patient_name=@patient_name,
+dob=@dob,
+aadhaar_id=@aadhaar_id,
+guardian_name=@guardian_name,
+blood_group=@blood_group,
+age=@age,
+gender=@gender,
+phone_number=@phone_number,
+emergency_Contact=@emergency_Contact,
+email_id=@email_id,
+address=@address,
+zipcode=@zipcode,
+city=@city,
+state=@state
+where  patient_id=@patient_id ;
+
+---------------------------------------------------------------------------
+
+create proc view_doctor
+(
+@doctor_id varchar(10)
+)
+as 
+select *  from doctor_details where doctor_id=@doctor_id;
+
+---------------------------------------------------------------------------
+
+create proc view_patient
+(
+@patient_id varchar(10)
+)
+as 
+select *  from patient_personal_details where patient_id=@patient_id;
+
+---------------------------------------------------------------------------
+
+create procedure verify_UserLogin
+(
+@u_Id varchar(100), 
+@psw varchar(100), 
+@status varchar(50) output
+)
+As
+Begin
+ if Exists(Select * from login where [USER ID]=@u_Id and pass=@psw)
+ set @status='Authorized User'
+ else
+ set @status='Unauthorized User'
+
+End

@@ -1,0 +1,236 @@
+CREATE TABLE appointment_report
+(
+	[patient_id] [varchar](100) NULL,
+	[doctor_id] [varchar](100) NULL,
+	[doctor_name] [varchar](100) NULL,
+	[symptom] [varchar](200) NULL,
+	[room] [varchar](100) NULL,
+	[timing] [varchar](100) NULL
+);
+
+-------------------------------------------------------------------
+
+CREATE TABLE assign_doctor
+(
+	[visiting_date] [datetime] NULL,
+	[patient_id] [varchar](10) NOT NULL,
+	[disease_name] [varchar](100) NOT NULL,
+	[symptoms_description] [varchar](1000) NOT NULL,
+	[medicine_name] [varchar](100) NULL,
+	[no_of_doses] [bigint] NULL,
+	[no_of_days] [bigint] NULL,
+	[test_name] [varchar](100) NULL,
+	[test_room] [bigint] NULL,
+	[test_time] [datetime] NULL,
+	[admit] [bit] NULL,
+	[room] [varchar](100) NOT NULL
+);
+
+ALTER TABLE assign_doctor WITH CHECK ADD FOREIGN KEY([patient_id])
+REFERENCES patient_personal_details ([patient_id]);
+
+--------------------------------------------------------------------
+
+CREATE TABLE blood_count
+(
+	[patient_id] [varchar](10) NOT NULL,
+	[rbc_count] [bigint] NOT NULL,
+	[wbc_count] [bigint] NOT NULL,
+	[platelet_count] [bigint] NOT NULL
+);
+
+ALTER TABLE blood_count WITH CHECK ADD FOREIGN KEY([patient_id])
+REFERENCES patient_personal_details ([patient_id]);
+
+--------------------------------------------------------------------
+
+CREATE TABLE blood_group
+(
+	[name] [varchar](100) NULL
+);
+
+--------------------------------------------------------------------
+
+CREATE TABLE bmi_calculator
+(
+	[patient_id] [varchar](10) NOT NULL,
+	[height] [decimal](18, 0) NOT NULL,
+	[weight] [decimal](18, 0) NOT NULL,
+	[bmi] [bigint] NOT NULL
+);
+
+ALTER TABLE bmi_calculator WITH CHECK ADD FOREIGN KEY([patient_id])
+REFERENCES patient_personal_details ([patient_id]);
+
+
+--------------------------------------------------------------------
+
+CREATE TABLE CITY
+(
+	[NAME] [varchar](100) NULL,
+	[STATE_NAME] [varchar](100) NULL
+);
+
+ALTER TABLE CITY  WITH CHECK ADD  CONSTRAINT [FK_ABC] FOREIGN KEY([STATE_NAME])
+REFERENCES STATE ([name]);
+
+--------------------------------------------------------------------
+
+CREATE TABLE diabetes_risk_calculation
+(
+	[bmi] [bigint] NOT NULL,
+	[BP_Systolic_value] [decimal](18, 0) NOT NULL,
+	[patient_id] [varchar](10) NOT NULL,
+	[BP_Diastolic_value] [decimal](18, 0) NOT NULL,
+	[Fasting_Glucose_reading] [decimal](18, 0) NOT NULL,
+	[HDL_Cholesterol_Reading] [decimal](18, 0) NOT NULL,
+	[Serum_Triglycerides] [decimal](18, 0) NOT NULL,
+	[Risk_of_Diabetes] [numeric](10, 0) NOT NULL
+);
+
+ALTER TABLE diabetes_risk_calculation  WITH CHECK ADD FOREIGN KEY([patient_id])
+REFERENCES patient_personal_details ([patient_id]);
+
+--------------------------------------------------------------------
+
+CREATE TABLE disease_specialization
+(
+	[doctor_id] [varchar](10) NULL,
+	[specialization] [varchar](50) NULL,
+	[symptom_name] [varchar](100) NULL,
+	[disease_name] [varchar](100) NULL
+);
+
+ALTER TABLE disease_specialization  WITH CHECK ADD FOREIGN KEY([doctor_id])
+REFERENCES doctor_details ([doctor_id]) ON DELETE CASCADE;
+
+--------------------------------------------------------------------
+
+CREATE TABLE dminutes
+(
+	[abc] [int] NULL
+);
+
+--------------------------------------------------------------------
+
+CREATE TABLE doctor_details
+(
+	[doctor_id] [varchar](10) NOT NULL,
+	[doctor_password] [varchar](20) NOT NULL,
+	[doctor_name] [varchar](100) NOT NULL,
+	[dob] [datetime] NOT NULL,
+	[aadhaar_id] [bigint] NOT NULL,
+	[blood_group] [varchar](10) NULL,
+	[gender] [varchar](100) NOT NULL,
+	[phone_number] [bigint] NOT NULL,
+	[emergency_Contact] [bigint] NOT NULL,
+	[email_id] [varchar](100) NULL,
+	[specialisation] [varchar](25) NOT NULL,
+	[address] [varchar](100) NOT NULL,
+	[zipcode] [bigint] NOT NULL,
+	[city] [varchar](100) NOT NULL,
+	[state] [varchar](100) NOT NULL,
+	[visiting_hours_start] [varchar](50) NULL,
+	[visiting_hours_end] [varchar](50) NULL,
+	[room_no] [bigint] NULL,
+ CONSTRAINT [PK__doctor_d__F399356403317E3D] PRIMARY KEY CLUSTERED 
+(
+	[doctor_id] ASC
+)
+);
+
+--------------------------------------------------------------------
+
+CREATE TABLE doctor_specialization
+(
+	[doctor_id] [varchar](10) NULL,
+	[specialization] [varchar](50) NULL,
+	[symptom_name] [varchar](100) NULL
+);
+
+ALTER TABLE doctor_specialization  WITH CHECK ADD FOREIGN KEY([doctor_id])
+REFERENCES doctor_details ([doctor_id])
+ON DELETE CASCADE;
+
+ALTER TABLE doctor_specialization  WITH CHECK ADD FOREIGN KEY([symptom_name])
+REFERENCES symptoms ([symptom_name]);
+
+--------------------------------------------------------------------
+
+CREATE TABLE glucose_reading
+(
+	[patient_id] [varchar](10) NOT NULL,
+	[blood_glucose_level] [varchar](50) NOT NULL,
+	[description] [varchar](250) NULL
+);
+
+ALTER TABLE glucose_reading  WITH CHECK ADD FOREIGN KEY([patient_id])
+REFERENCES patient_personal_details ([patient_id]);
+
+
+--------------------------------------------------------------------
+
+CREATE TABLE login
+(
+	[USER ID] [varchar](100) NULL,
+	[pass] [varchar](100) NULL
+);
+
+--------------------------------------------------------------------
+
+CREATE TABLE patient_personal_details
+(
+	[patient_id] [varchar](10) NOT NULL,
+	[patient_name] [varchar](100) NOT NULL,
+	[dob] [date] NOT NULL,
+	[aadhaar_id] [bigint] NOT NULL,
+	[guardian_name] [varchar](100) NOT NULL,
+	[blood_group] [varchar](10) NULL,
+	[age] [int] NOT NULL,
+	[gender] [varchar](100) NOT NULL,
+	[phone_number] [bigint] NOT NULL,
+	[emergency_Contact] [bigint] NOT NULL,
+	[email_id] [varchar](100) NULL,
+	[address] [varchar](100) NOT NULL,
+	[zipcode] [bigint] NOT NULL,
+	[city] [varchar](100) NOT NULL,
+	[state] [varchar](100) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[patient_id] ASC
+)
+);
+
+--------------------------------------------------------------------
+
+CREATE TABLE STATE
+(
+	[name] [varchar](100) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[name] ASC
+)
+);
+
+--------------------------------------------------------------------
+
+CREATE TABLE symptoms
+(
+	[symptom_name] [varchar](100) NOT NULL,
+ CONSTRAINT [symptom_name_pk] PRIMARY KEY CLUSTERED 
+(
+	[symptom_name] ASC
+)
+);
+
+--------------------------------------------------------------------
+
+CREATE TABLE thyroid_calculation
+(
+	[patient_id] [varchar](10) NOT NULL,
+	[tsh] [bigint] NOT NULL,
+	[t4] [bigint] NOT NULL
+);
+
+ALTER TABLE thyroid_calculation  WITH CHECK ADD FOREIGN KEY([patient_id])
+REFERENCES patient_personal_details ([patient_id]);
